@@ -1,3 +1,4 @@
+/*
 let order = [];
 let clickedOrder = [];
 let score = 0;
@@ -105,3 +106,4 @@ blue.onclick = () => click(3);
 
 // início do jogo
 playGame();
+*/
