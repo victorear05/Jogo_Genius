@@ -1,39 +1,38 @@
-/*
+
+alert('Bem vindo ao Genius! Clique em INICIAR para começar a jogar!')
 let order = [];
+let score = -1;
 let clickedOrder = [];
-let score = 0;
+let lock = true
+// true = locked
+// flase = unlocked 
 
 // 0 - verde
 // 1 - vermelho
 // 2 - amarelo
 // 3 - azul
+// 4 - start/re-start
 
 const green = document.querySelector('.green');
 const red = document.querySelector('.red');
 const yellow = document.querySelector('.yellow');
 const blue = document.querySelector('.blue');
+const start = document.querySelector('.start');
 
-// cria ordem aleatória de cores
+// cria ordem aleatória de cores **
 let shuffleOrder = () => {
-    let colorOrder = Math.floor(Math.random() * 4);
-    order[order.length] = colorOrder;
-    clickedOrder = [];
-
+    let randomColor = Math.floor(Math.random() * 4);
+    order.push(randomColor);
     for(let i in order) {
-        let elementColor = createColorElement(order[i]);
-        lightColor(elementColor, Number(i) + 1);
+        setTimeout(() => {
+            setTimeout(() => {
+                createColorElement(order[i]).classList.add('selected');
+            },100);
+            setTimeout(() => {
+                createColorElement(order[i]).classList.remove('selected');
+            },400);
+        }, 400*i);
     }
-}
-
-// acende a próxima cor
-let lightColor = (element, number) => {
-    number = number * 500;
-    setTimeout(() => {
-        element.classList.add('selected');
-    }, number - 250);
-    setTimeout(() => {
-        element.classList.remove('selected');
-    });
 }
 
 // checa se os botões clicados são os mesmo da ordem gerada no jogo
@@ -45,20 +44,25 @@ let checkOrder = () => {
         }
     }
     if(clickedOrder.length == order.length) {
-        alert(`Pontuação: ${score}\nVocê acertou! Iniciando próximo nível!`);
         nextLevel();
     }
 }
 
 //função para o clique do usuário
 let click = (color) => {
-    clickedOrder[clickedOrder.length] = color;
-    createColorElement(color).classList.add('selected');
+    if(color == 4){
+        playGame();
+    }
+    else{
+        clickedOrder.push(color);
+        createColorElement(color).classList.add('selected');
 
-    setTimeout(() => {
+        setTimeout(() => {
         createColorElement(color).classList.remove('selected');
         checkOrder();
-    },250)
+        },200)
+    }
+    
 }
 
 // função que retorna a cor
@@ -76,34 +80,51 @@ let createColorElement = (color) => {
 
 // função para próximo nível do jogo
 let nextLevel = () => {
-    shuffleOrder();
+    clickedOrder = [];
     score++;
+    shuffleOrder();
 }
 
 // função para fim de jogo
 let lose = () => {
-    alert(`Pontuação: ${score}!\nVocê perdeu o jogo!\nClique em OK para iniciar um novo jogo`)
-    order = [];
-    clickedOrder = [];
-
-    playGame();
+    alert(`Pontuação: ${score}!\nVocê perdeu o jogo!\nClique em INICIAR começar um novo jogo`)
+    lock = true;
 }
 
 // função de início de jogo
 let playGame = () => {
-    alert('Bem vindo ao Genius! Iniciando novo jogo!')
-    score = 0;
-
+    score = -1;
+    order = [];
+    clickedOrder = [];
     nextLevel();
 }
 
 // eventos de clique para as cores
-green.onclick = () => click(0);
-red.onclick = () => click(1);
-yellow.onclick = () => click(2);
-blue.onclick = () => click(3);
+green.onclick = () => {
+    if(lock==false){
+        click(0);
+    }
+}
 
+red.onclick = () => {
+    if(lock==false){
+        click(1);
+    }
+}
 
-// início do jogo
-playGame();
-*/
+yellow.onclick = () => {
+    if(lock==false){
+        click(2);
+    }
+}
+
+blue.onclick = () => {
+    if(lock==false){
+        click(3);
+    }
+}
+
+start.onclick = () => {
+    lock = false;
+    click(4);
+}
