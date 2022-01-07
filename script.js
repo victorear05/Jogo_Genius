@@ -1,5 +1,6 @@
-
 alert('Bem vindo ao Genius! Clique em INICIAR para começar a jogar!')
+
+ main
 let order = [];
 let score = -1;
 let clickedOrder = [];
@@ -128,3 +129,6 @@ start.onclick = () => {
     lock = false;
     click(4);
 }
+
+// início do jogo
+playGame();
